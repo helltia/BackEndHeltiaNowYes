@@ -56,16 +56,27 @@ async function login(req, res){
 async function sendMessage(req, res){
     const image = req.body.image
     const message = req.body.message
+    const username = req.body.username
     try {
         if(image){
             const response = await aiController.image(image)
+            const user = await User.findOne({username: username})
+            user.messages.push({sender: 0, message: "dos"})
+
+            await user.save(
+
+            )
+            res.status(200).json({
+                message: "Success",
+                obj: user
+            })
+        }
+        else if(message) {
+            const response = null
             res.status(200).json({
                 message: "Success",
                 obj: response
             })
-        }
-        else if(message) {
-
         }
     }
     catch (e) {
@@ -73,8 +84,30 @@ async function sendMessage(req, res){
     }
 }
 
+async function getUserMessages(req, res){
+    const username = req.body.username;
+    try {
+        const messages = await User.findOne({
+            username: username
+        },{
+            messages: 1
+        })
+        res.status(200).json({
+            message: "All messages from user",
+            obj: messages
+        })
+    } catch(e) {
+        res.status(400).json({
+            message: "Error getting user messages",
+            error: e
+        })
+    }
+
+}
+
 module.exports = {
     createUser,
     login,
-    sendMessage
+    sendMessage,
+    getUserMessages
 }

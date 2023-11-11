@@ -10,5 +10,6 @@ router.get('/', function(req, res, next) {
 router.post('/', userController.createUser);
 router.post('/login', userController.login);
 router.post('/sendMessage', userController.sendMessage);
+router.get('/messages', userController.getUserMessages)
 
 module.exports = router;
