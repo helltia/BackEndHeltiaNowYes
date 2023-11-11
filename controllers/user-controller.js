@@ -1,4 +1,28 @@
 const User = require('../models/user-model').User
+const aiController = require('./ai-controller')
+
+async function createUser(req, res) {
+    const name = req.body.name
+    const lastname = req.body.lastname
+    const username = req.body.username
+    const password = req.body.password
+    try {
+        const user = await new User({
+            name: name,
+            lastname: lastname,
+            username: username,
+            password: password
+        }).save();
+        res.status(200).json({
+            message: "User successfully created",
+            obj: user
+        })
+    } catch (e) {
+        res.status(400).json({
+            message: "Error creating user",
+        })
+    }
+}
 
 async function login(req, res){
     const username = req.body.username
@@ -29,6 +53,28 @@ async function login(req, res){
     }
 }
 
+async function sendMessage(req, res){
+    const image = req.body.image
+    const message = req.body.message
+    try {
+        if(image){
+            const response = await aiController.image(image)
+            res.status(200).json({
+                message: "Success",
+                obj: response
+            })
+        }
+        else if(message) {
+
+        }
+    }
+    catch (e) {
+
+    }
+}
+
 module.exports = {
-    login
+    createUser,
+    login,
+    sendMessage
 }
