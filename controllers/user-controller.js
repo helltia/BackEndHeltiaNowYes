@@ -14,8 +14,9 @@ async function login(req, res){
                 obj: user
             })
         } else {
-            res.status(402).json({
-                message: 
+            res.status(401).json({
+                message: "Wrong user or password",
+                obj: null
             })
         }
     } catch (e) {
