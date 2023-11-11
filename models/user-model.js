@@ -7,7 +7,7 @@ const MessageSchema = new mongoose.Schema(
         sender: {
             type: Boolean,
             required: true,
-            default: false
+            default: true
         },
         message: {
             type: String,
@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema(
             required: true,
             default: " "
         },
-        message: {
+        messages: {
             type: [MessageSchema],
             required: true,
             default: []
