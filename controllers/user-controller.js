@@ -179,7 +179,7 @@ async function deleteAllMessages(req, res){
             {
                 $pull: {
                     messages: {
-                        _id: { $ne: (await User.findById(userId)).messages[0]._id },
+                        _id: { $ne: (await User.findOne({username: username})).messages[0]._id },
                     },
                 },
             }
