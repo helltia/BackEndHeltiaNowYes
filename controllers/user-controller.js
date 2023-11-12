@@ -80,7 +80,10 @@ async function sendMessage(req, res){
         }
     }
     catch (e) {
-
+        res.status(400).json({
+            error: e,
+            message: "error"
+        })
     }
 }
 
