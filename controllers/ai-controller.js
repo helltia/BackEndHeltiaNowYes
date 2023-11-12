@@ -1,6 +1,6 @@
 const axios = require("axios");
 const userController = require('./user-controller');
-const api_key = "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";
+const api_key = "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";
 
 async function image(base64Image){
 
