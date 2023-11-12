@@ -30,18 +30,8 @@ async function login(req, res){
     try {
         const user = await User.findOne({
             username: username,
+            password: password
         })
-
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid username or password' });
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid username or password' });
-        }
-
         if(user) {
             res.status(200).json({
                 message: "Success",
@@ -90,7 +80,10 @@ async function sendMessage(req, res){
         }
     }
     catch (e) {
-
+        res.status(400).json({
+            error: e,
+            message: "error"
+        })
     }
 }
 
