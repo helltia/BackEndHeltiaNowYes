@@ -59,8 +59,8 @@ async function sendMessage(req, res){
         if(image){
             // const response = await aiController.image(image)
             const user = await User.findOne({username: username})
-            user.messages.push({sender: 1, message: image})
-            user.messages.push({sender: 0, message: "mensaje"})
+            user.messages.push({sender: 1, role: "user", content: image})
+            user.messages.push({sender: 0, role: "system", content: "mensaje"})
 
             await user.save()
             res.status(200).json({
@@ -69,10 +69,18 @@ async function sendMessage(req, res){
             })
         }
         else if(message) {
-            const response = null
+            const user = await User.findOne({username: username})
+            user.messages.push({sender: 1, role: "user", message: message})
+            // const response = await aiController.text(message)
+            user.messages.push({sender: 0, role: "system", message: "mensaje"})
             res.status(200).json({
                 message: "Success",
                 obj: response
+            })
+        }
+        else {
+            res.status(404).json({
+                message: "Please add aa message or image"
             })
         }
     }
@@ -105,9 +113,30 @@ async function getUserMessages(req, res){
 
 }
 
+async function getMessagesOpenAi(req, res){
+    const username = req.body.username
+    try {
+        const messages = await User.findOne({
+            username: username
+        }, {
+            messages: 1
+        })
+        res.status(200).json({
+            message: "All messages",
+            obj: messages
+        })
+    } catch (e) {
+        res.status(400).json({
+            message: "Error",
+            error: e
+        })
+    }
+}
+
 module.exports = {
     createUser,
     login,
     sendMessage,
-    getUserMessages
+    getUserMessages,
+    getMessagesOpenAi
 }

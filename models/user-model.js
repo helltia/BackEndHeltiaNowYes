@@ -9,7 +9,12 @@ const MessageSchema = new mongoose.Schema(
             required: true,
             default: true
         },
-        message: {
+        role: {
+            type: String,
+            required: true,
+            default: " "
+        },
+        content: {
             type: String,
             required: true,
             default: " "
@@ -43,7 +48,13 @@ const UserSchema = new mongoose.Schema(
         messages: {
             type: [MessageSchema],
             required: true,
-            default: []
+            default: [
+                {
+                    sender: false,
+                    role: "system",
+                    content: "Eres un asistente de primeros auxilios, si con la información dada por el usuario, determinas que necesita irse a un hospital de emergencia, no le des ninguna instrucción, directamente dile que necesita ir a urgencias"
+                }
+            ]
         }
     }
 )
