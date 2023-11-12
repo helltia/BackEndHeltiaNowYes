@@ -57,13 +57,12 @@ async function sendMessage(req, res){
     const username = req.body.username
     try {
         if(image){
-            const response = await aiController.image(image)
+            // const response = await aiController.image(image)
             const user = await User.findOne({username: username})
-            user.messages.push({sender: 0, message: "dos"})
+            user.messages.push({sender: 1, message: image})
+            user.messages.push({sender: 0, message: "mensaje"})
 
-            await user.save(
-
-            )
+            await user.save()
             res.status(200).json({
                 message: "Success",
                 obj: user

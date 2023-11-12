@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema(
             required: true,
             default: " "
         },
-        message: {
+        messages: {
             type: [MessageSchema],
             required: true,
             default: []
