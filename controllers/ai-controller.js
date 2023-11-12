@@ -30,7 +30,7 @@ async function image(base64Image){
                     ]
                 }
             ],
-            "max_tokens": 300
+            "max_tokens": 200
         };
         console.log('aqui img64 2');
         //console.log('aqui img64 p', base64Image);
@@ -55,7 +55,7 @@ async function chat(messages){
         const payload = {
             "model": "gpt-4-1106-preview",
             "messages": messages.messages,
-            "max_tokens": 150
+            "max_tokens": 200
         };
         const response = await axios.post("https://api.openai.com/v1/chat/completions", payload, { headers });
         return response.data.choices[0]?.message?.content;
