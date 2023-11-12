@@ -57,10 +57,10 @@ async function sendMessage(req, res){
     const username = req.body.username
     try {
         if(image){
-            // const response = await aiController.image(image)
+            const response = await aiController.image(image)
             const user = await User.findOne({username: username})
-            user.messages.push({sender: 1, role: "user", content: image})
-            user.messages.push({sender: 0, role: "assistant", content: "mensaje"})
+            user.messages.push({sender: 1, role: "user", content: "Image"})
+            user.messages.push({sender: 0, role: "assistant", content: response})
 
             await user.save()
             res.status(200).json({
@@ -71,8 +71,18 @@ async function sendMessage(req, res){
         else if(message) {
             const user = await User.findOne({username: username})
             user.messages.push({sender: 1, role: "user", content: message})
-            // const response = await aiController.text(message)
-            user.messages.push({sender: 0, role: "assistant", content: "mensaje"})
+            await user.save()
+
+            const messages = await User.findOne({
+                username: username
+            }, {
+                'messages.role': 1,
+                'messages.content': 1,
+                _id: 0
+            })
+
+            const response = await aiController.chat(messages)
+            user.messages.push({sender: 0, role: "assistant", content: response})
             res.status(200).json({
                 message: "Success",
                 obj: response
