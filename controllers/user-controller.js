@@ -134,6 +134,7 @@ async function getUserMessages(req, res){
 
 async function deleteUserMessages(req, res){
     const username = req.params.username;
+    console.log('user', username);
     try {
         const messages = await User.findOne({
             username: username
@@ -141,12 +142,10 @@ async function deleteUserMessages(req, res){
             'messages.sender': 1,
             'messages.content': 1
         })
-        res.status(200).json({
-            message: "All messages from user",
-            obj: messages
-        })
-
         messages.delete();
+
+
+        
     } catch(e) {
         res.status(400).json({
             message: "Error getting user messages",
