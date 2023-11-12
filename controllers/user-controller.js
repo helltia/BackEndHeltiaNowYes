@@ -60,7 +60,7 @@ async function sendMessage(req, res){
             // const response = await aiController.image(image)
             const user = await User.findOne({username: username})
             user.messages.push({sender: 1, role: "user", content: image})
-            user.messages.push({sender: 0, role: "system", content: "mensaje"})
+            user.messages.push({sender: 0, role: "assistant", content: "mensaje"})
 
             await user.save()
             res.status(200).json({
@@ -70,9 +70,9 @@ async function sendMessage(req, res){
         }
         else if(message) {
             const user = await User.findOne({username: username})
-            user.messages.push({sender: 1, role: "user", message: message})
+            user.messages.push({sender: 1, role: "user", content: message})
             // const response = await aiController.text(message)
-            user.messages.push({sender: 0, role: "system", message: "mensaje"})
+            user.messages.push({sender: 0, role: "assistant", content: "mensaje"})
             res.status(200).json({
                 message: "Success",
                 obj: response
@@ -93,12 +93,14 @@ async function sendMessage(req, res){
 }
 
 async function getUserMessages(req, res){
-    const username = req.body.username;
+    const username = req.params.username;
     try {
         const messages = await User.findOne({
             username: username
         },{
-            messages: 1
+            'messages.sender': 1,
+            'messages.content': 1,
+            _id: 0
         })
         res.status(200).json({
             message: "All messages from user",
@@ -114,12 +116,14 @@ async function getUserMessages(req, res){
 }
 
 async function getMessagesOpenAi(req, res){
-    const username = req.body.username
+    const username = req.params.username
     try {
         const messages = await User.findOne({
             username: username
         }, {
-            messages: 1
+            'messages.role': 1,
+            'messages.content': 1,
+            _id: 0
         })
         res.status(200).json({
             message: "All messages",

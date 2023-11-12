@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 router.post('/', userController.createUser);
 router.post('/login', userController.login);
 router.post('/sendMessage', userController.sendMessage);
-router.get('/messages', userController.getUserMessages);
-router.get('/messageOpenAi', userController.getMessagesOpenAi);
+router.get('/messages/:username', userController.getUserMessages);
+router.get('/messageOpenAi/:username', userController.getMessagesOpenAi);
 
 module.exports = router;
