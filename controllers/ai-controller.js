@@ -1,8 +1,6 @@
 const axios = require("axios");
-const Configuration = require("openai").Configuration;
-const OpenAIApi = requiere("openai").OpenAIApi;
-const userController = require('./user-controller')
-const api_key = "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";
+const userController = require('./user-controller');
+const api_key = "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";
 
 async function image(base64Image){
    
@@ -40,41 +38,32 @@ async function image(base64Image){
         return response.data.choices[0]?.message?.content;
 
     } catch (e) {
-        res.status(500).json({
-            message: "error",
-            error: e.message
-        });
+        console.log(e.message);
     }
 }
 
 
-async function chat(username){
-    
+async function chat(messages){
+
     try {
-        messages = userController.getMessagesOpenAi(username);
-        
         const headers = {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${api_key}`
         };
-
+        console.log('2');
         const payload = {
             "model": "gpt-4-1106-preview",
-            "messages": messages.obj
+            "messages": messages.messages
         };
-
         const response = await axios.post("https://api.openai.com/v1/chat/completions", payload, { headers });
-
         return response.data.choices[0]?.message?.content;
 
     } catch (e) {
-        res.status(500).json({
-            message: "error",
-            error: e.message
-        });
+        console.log(e.message);
     }
 }
 
 module.exports = {
-    image
+    image,
+    chat
 }

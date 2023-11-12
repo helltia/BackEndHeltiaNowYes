@@ -52,6 +52,7 @@ async function login(req, res){
 }
 
 async function sendMessage(req, res){
+
     const image = req.body.image
     const message = req.body.message
     const username = req.body.username
@@ -80,11 +81,13 @@ async function sendMessage(req, res){
                 'messages.content': 1,
                 _id: 0
             })
-
-            const response = await aiController.chat(messages)
+            chat =  await getMessagesOpenAi(username);
+            
+            const response = await aiController.chat(chat)
             user.messages.push({sender: 0, role: "assistant", content: response})
+            await user.save()
             res.status(200).json({
-                message: "Success",
+                message: response,
                 obj: response
             })
         }
@@ -96,7 +99,11 @@ async function sendMessage(req, res){
     }
     catch (e) {
         res.status(400).json({
-            error: e,
+            error: {
+                name: e.name,
+                message: e.message,
+                stack: e.stack,
+              },
             message: "error"
         })
     }
@@ -124,8 +131,33 @@ async function getUserMessages(req, res){
 
 }
 
-async function getMessagesOpenAi(req, res){
-    const username = req.params.username
+
+async function deleteUserMessages(req, res){
+    const username = req.params.username;
+    try {
+        const messages = await User.findOne({
+            username: username
+        },{
+            'messages.sender': 1,
+            'messages.content': 1
+        })
+        res.status(200).json({
+            message: "All messages from user",
+            obj: messages
+        })
+
+        messages.delete();
+    } catch(e) {
+        res.status(400).json({
+            message: "Error getting user messages",
+            error: e
+        })
+    }
+
+}
+
+async function getMessagesOpenAi(username){
+    
     try {
         const messages = await User.findOne({
             username: username
@@ -134,15 +166,9 @@ async function getMessagesOpenAi(req, res){
             'messages.content': 1,
             _id: 0
         })
-        res.status(200).json({
-            message: "All messages",
-            obj: messages
-        })
+        return messages;
     } catch (e) {
-        res.status(400).json({
-            message: "Error",
-            error: e
-        })
+        console.log(e.message)
     }
 }
 
@@ -151,5 +177,6 @@ module.exports = {
     login,
     sendMessage,
     getUserMessages,
-    getMessagesOpenAi
+    getMessagesOpenAi,
+    deleteUserMessages
 }

@@ -12,5 +12,6 @@ router.post('/login', userController.login);
 router.post('/sendMessage', userController.sendMessage);
 router.get('/messages/:username', userController.getUserMessages);
 router.get('/messageOpenAi/:username', userController.getMessagesOpenAi);
+router.delete('/messages/:username', userController.deleteUserMessages);
 
 module.exports = router;
