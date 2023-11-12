@@ -82,7 +82,7 @@ async function sendMessage(req, res){
                 _id: 0
             })
             chat =  await getMessagesOpenAi(username);
-            
+
             const response = await aiController.chat(chat)
             user.messages.push({sender: 0, role: "assistant", content: response})
             await user.save()
@@ -145,7 +145,7 @@ async function deleteUserMessages(req, res){
         messages.delete();
 
 
-        
+
     } catch(e) {
         res.status(400).json({
             message: "Error getting user messages",
@@ -156,7 +156,7 @@ async function deleteUserMessages(req, res){
 }
 
 async function getMessagesOpenAi(username){
-    
+
     try {
         const messages = await User.findOne({
             username: username
@@ -171,11 +171,37 @@ async function getMessagesOpenAi(username){
     }
 }
 
+async function deleteAllMessages(req, res){
+    const username = req.params.username
+    try {
+        const result = await User.updateOne(
+            { username: username },
+            {
+                $pull: {
+                    messages: {
+                        _id: { $ne: (await User.findById(userId)).messages[0]._id },
+                    },
+                },
+            }
+        );
+        res.status(200).json({
+            message: "Messages deleted",
+            obj: result
+        })
+    } catch (e){
+        res.status(500).json({
+            message: "Error",
+            error: e
+        })
+    }
+}
+
 module.exports = {
     createUser,
     login,
     sendMessage,
     getUserMessages,
     getMessagesOpenAi,
-    deleteUserMessages
+    deleteUserMessages,
+    deleteAllMessages
 }
