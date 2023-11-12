@@ -12,7 +12,7 @@ require('dotenv').config()
 var app = express();
 const mongoose = require("mongoose");
 
-const mongoURI = "mongodb+srv://r00tULSA:r00tULSA@cluster1.zonto2i.mongodb.net/healthia"
+const mongoURI = process.env.DATABASE_URL
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
