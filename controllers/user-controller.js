@@ -57,7 +57,7 @@ async function sendMessage(req, res){
     const username = req.body.username
     try {
         if(image){
-            // const response = await aiController.image(image)
+            const response = await aiController.image(image)
             const user = await User.findOne({username: username})
             user.messages.push({sender: 1, role: "user", content: image})
             user.messages.push({sender: 0, role: "system", content: "mensaje"})
@@ -70,8 +70,9 @@ async function sendMessage(req, res){
         }
         else if(message) {
             const user = await User.findOne({username: username})
+
             user.messages.push({sender: 1, role: "user", message: message})
-            // const response = await aiController.text(message)
+            const response = await aiController.text(message)
             user.messages.push({sender: 0, role: "system", message: "mensaje"})
             res.status(200).json({
                 message: "Success",
@@ -93,7 +94,7 @@ async function sendMessage(req, res){
 }
 
 async function getUserMessages(req, res){
-    const username = req.body.username;
+    const username = req.param.username;
     try {
         const messages = await User.findOne({
             username: username
