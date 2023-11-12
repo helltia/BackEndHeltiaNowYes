@@ -60,7 +60,7 @@ async function sendMessage(req, res){
         if(image){
             const response = await aiController.image(image)
             const user = await User.findOne({username: username})
-            user.messages.push({sender: 1, role: "user", content: "Image"})
+            user.messages.push({sender: 1, role: "user", content: "**Imagen visualizada**"})
             user.messages.push({sender: 0, role: "assistant", content: response})
 
             await user.save()
