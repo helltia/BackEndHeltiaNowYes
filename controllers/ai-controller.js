@@ -1,6 +1,6 @@
 const axios = require("axios");
 const userController = require('./user-controller');
-const api_key = "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";
+const api_key = "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";
 
 async function image(base64Image){
 
@@ -55,9 +55,7 @@ async function chat(messages){
             "model": "gpt-4-1106-preview",
             "messages": messages.messages
         };
-        console.log(messages.messages);
         const response = await axios.post("https://api.openai.com/v1/chat/completions", payload, { headers });
-        console.log(response);
         return response.data.choices[0]?.message?.content;
         
     } catch (e) {
