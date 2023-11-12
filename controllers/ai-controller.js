@@ -3,7 +3,7 @@ const userController = require('./user-controller');
 const api_key = "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";
 
 async function image(base64Image){
-   
+
     try {
 
         const headers = {
