@@ -99,8 +99,7 @@ async function getUserMessages(req, res){
             username: username
         },{
             'messages.sender': 1,
-            'messages.content': 1,
-            _id: 0
+            'messages.content': 1
         })
         res.status(200).json({
             message: "All messages from user",
