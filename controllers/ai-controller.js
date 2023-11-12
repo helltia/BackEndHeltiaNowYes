@@ -1,11 +1,11 @@
 const axios = require("axios");
 const Configuration = require("openai").Configuration;
-const OpenAIApi = requiere("openai").OpenAIApi;
+const OpenAIApi = require("openai").OpenAIApi;
 const userController = require('./user-controller')
 const api_key = "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";
 
 async function image(base64Image){
-   
+
     try {
 
         const headers = {
@@ -49,10 +49,10 @@ async function image(base64Image){
 
 
 async function chat(username){
-    
+
     try {
         messages = userController.getMessagesOpenAi(username);
-        
+
         const headers = {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${api_key}`
