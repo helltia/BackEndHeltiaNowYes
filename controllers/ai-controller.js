@@ -3,7 +3,7 @@ const userController = require('./user-controller');
 const api_key = process.env.API_KEY;
 
 async function image(base64Image){
-
+    console.log('aqui img64');
     try {
 
         const headers = {
@@ -19,12 +19,12 @@ async function image(base64Image){
                     "content": [
                         {
                             "type": "text",
-                            "text": "Considerando la imagen,¿Que tipo de lesión parece ser?, ¿cuáles podrían ser las medidas de primeros auxilios que se deben tener en cuenta? Además, ¿qué acciones inmediatas o precauciones deberían tomarse en esta situación?What’s in this image?"
+                            "text": "Considerando la imagen,¿Que tipo de lesión parece ser?, ¿cuáles podrían ser las medidas de primeros auxilios que se deben tener en cuenta? Además, ¿qué acciones inmediatas o precauciones deberían tomarse en esta situación? (ojo, si consideras que la lesión es muy grave, no le des tips, mandaló a urgencias de inmediato)"
                         },
                         {
                             "type": "image_url",
                             "image_url": {
-                                "url": `data:image/jpeg;base64,${base64Image}`
+                                "url": `${base64Image}`
                             }
                         }
                     ]
@@ -32,9 +32,10 @@ async function image(base64Image){
             ],
             "max_tokens": 300
         };
-
+        console.log('aqui img64 2');
+        //console.log('aqui img64 p', base64Image);
         const response = await axios.post("https://api.openai.com/v1/chat/completions", payload, { headers });
-
+        console.log(response);
         return response.data.choices[0]?.message?.content;
 
     } catch (e) {

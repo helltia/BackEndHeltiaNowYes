@@ -65,7 +65,7 @@ async function sendMessage(req, res){
 
             await user.save()
             res.status(200).json({
-                message: "Success",
+                message: response,
                 obj: user
             })
         }
