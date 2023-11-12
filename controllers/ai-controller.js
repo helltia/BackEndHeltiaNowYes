@@ -54,7 +54,8 @@ async function chat(messages){
         console.log('2');
         const payload = {
             "model": "gpt-4-1106-preview",
-            "messages": messages.messages
+            "messages": messages.messages,
+            "max_tokens": 150
         };
         const response = await axios.post("https://api.openai.com/v1/chat/completions", payload, { headers });
         return response.data.choices[0]?.message?.content;
