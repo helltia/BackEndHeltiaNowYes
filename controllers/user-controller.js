@@ -7,16 +7,11 @@ async function createUser(req, res) {
     const username = req.body.username
     const password = req.body.password
     try {
-        const user = await new User({
-            name: name,
-            lastname: lastname,
-            username: username,
-            password: password
-        }).save();
+        const user = await new User({ name, lastname, username, password, messages }).save();
         res.status(200).json({
             message: "User successfully created",
             obj: user
-        })
+        });
     } catch (e) {
         res.status(400).json({
             message: "Error creating user",
