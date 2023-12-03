@@ -2,22 +2,35 @@ const User = require('../models/user-model').User
 const aiController = require('./ai-controller')
 
 async function createUser(req, res) {
-    const name = req.body.name
-    const lastname = req.body.lastname
-    const username = req.body.username
-    const password = req.body.password
+    const { name, lastname, username, password } = req.body;
+
+    if (!name || !lastname || !username || !password) {
+        return res.status(400).json({
+            message: "Name, lastname, username, and password are required"
+        });
+    }
+
     try {
-        const user = await new User({ name, lastname, username, password, messages }).save();
+        const user = await new User({
+            name,
+            lastname,
+            username,
+            password
+        }).save();
+
         res.status(200).json({
             message: "User successfully created",
             obj: user
         });
     } catch (e) {
-        res.status(400).json({
+        console.error("Error:", e); // Imprimir el error completo para depuración
+        res.status(500).json({
             message: "Error creating user",
-        })
+            error: e.message
+        });
     }
 }
+
 
 async function login(req, res){
     const username = req.body.username
